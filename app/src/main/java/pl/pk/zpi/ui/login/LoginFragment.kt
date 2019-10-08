@@ -5,33 +5,47 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.*
+import org.koin.android.ext.android.inject
 import pl.pk.zpi.R
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), LoginContract.View {
 
-    private var isLoginMode = true
+    private val presenter: LoginContract.Presenter by inject()
+    private val snackbar: Snackbar by lazy { Snackbar.make(fragment, "Please wait", Snackbar.LENGTH_INDEFINITE) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.fragment_login, container, false)
 
     override fun onStart() {
         super.onStart()
+        presenter.onViewPresent(this)
+    }
 
+    override fun initViews() {
+        card.cameraDistance = card.cameraDistance * (resources.displayMetrics.density * 1.33).toFloat()
 
-        val scale = resources.displayMetrics.density
-        val distance = card.cameraDistance * (scale * 1.33).toFloat()
-        card.cameraDistance = distance
+        buttonLogin.setOnClickListener {
+            presenter.onLoginTap(
+                emailInput.text.toString(),
+                passwordInput.text.toString()
+            )
+        }
 
         buttonChangeMode.setOnClickListener {
-            if (isLoginMode) {
-                switchMode(getString(R.string.register), getString(R.string.already_have_account), 1)
-            } else {
-                switchMode(getString(R.string.login), getString(R.string.don_t_have_an_account_register), -1)
-            }
-            isLoginMode = !isLoginMode
+            presenter.onChangeModeTap()
         }
+    }
+
+    override fun switchToLogin() {
+        switchMode(getString(R.string.login), getString(R.string.don_t_have_an_account_register), -1)
+    }
+
+    override fun switchToRegister() {
+        switchMode(getString(R.string.register), getString(R.string.already_have_account), 1)
     }
 
     private fun switchMode(loginButtonText: String, switchModeText: String, directionFactor: Int) {
@@ -56,6 +70,27 @@ class LoginFragment : Fragment() {
                     .start()
             }
             .start()
+    }
+
+    override fun showProgress() {
+        snackbar.show()
+    }
+
+    override fun hideProgress() {
+        snackbar.dismiss()
+    }
+
+    override fun goToCamera() {
+        Toast.makeText(context, getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showError() {
+        Toast.makeText(context, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onStop() {
+        presenter.unsubscribe()
+        super.onStop()
     }
 
 }

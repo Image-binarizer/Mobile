@@ -26,6 +26,7 @@ ext {
     constraintLayoutVersion = "2.0.0-beta2"
     cardViewVersion = "1.0.0"
     ktxVersion = "1.1.0"
+    materialVersion = "1.0.0"
 
     rxJavaVersion = "2.2.13"
     rxAndroidVersion = "2.1.1"
@@ -52,6 +53,7 @@ dependencies {
     implementation "androidx.core:core-ktx:$ktxVersion"
     implementation "androidx.cardview:cardview:$cardViewVersion"
     implementation "androidx.constraintlayout:constraintlayout:$constraintLayoutVersion"
+    implementation "com.google.android.material:material:$materialVersion"
 
     // Rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
