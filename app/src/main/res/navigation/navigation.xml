@@ -12,7 +12,11 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_cameraFragment"
-            app:destination="@id/cameraFragment" />
+            app:destination="@id/cameraFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"/>
     </fragment>
 
     <fragment
@@ -22,16 +26,26 @@
         tools:layout="@layout/fragment_camera" >
         <action
             android:id="@+id/action_cameraFragment_to_previewFragment"
-            app:destination="@id/previewFragment" />
+            app:destination="@id/previewFragment"
+            app:enterAnim="@anim/slide_in_top"
+            app:popEnterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popExitAnim="@anim/slide_out_bottom" />
         <action
             android:id="@+id/action_cameraFragment_to_galleryFragment"
-            app:destination="@id/galleryFragment" />
+            app:destination="@id/galleryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left" />
     </fragment>
+
     <fragment
         android:id="@+id/previewFragment"
         android:name="pl.pk.zpi.ui.preview.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview" />
+
     <fragment
         android:id="@+id/galleryFragment"
         android:name="pl.pk.zpi.ui.gallery.GalleryFragment"

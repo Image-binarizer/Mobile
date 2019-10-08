@@ -41,7 +41,7 @@ class LoginPresenter(
     }
 
     private fun login(email: String, password: String) {
-
+        view.goToCamera()
     }
 
     override fun onChangeModeTap() {

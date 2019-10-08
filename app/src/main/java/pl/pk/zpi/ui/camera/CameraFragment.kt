@@ -9,14 +9,17 @@ import android.view.LayoutInflater
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import pl.pk.zpi.R
 import android.view.WindowManager
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 
 class CameraFragment : Fragment() {
+
+    private val navigationController: NavController by lazy { findNavController() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_camera, container, false)
@@ -34,6 +37,10 @@ class CameraFragment : Fragment() {
         )
 
         texture.post { startCamera() }
+
+        galleryButton.setOnClickListener {
+            navigationController.navigate(R.id.action_cameraFragment_to_galleryFragment)
+        }
     }
 
     private fun startCamera() {
@@ -63,8 +70,8 @@ class CameraFragment : Fragment() {
             }.build()
 
         val imageCapture = ImageCapture(imageCaptureConfig)
-        shutter.setOnClickListener {
-            Toast.makeText(context, "Shutter", Toast.LENGTH_SHORT).show()
+        shutterButton.setOnClickListener {
+            navigationController.navigate(R.id.action_cameraFragment_to_previewFragment)
 //            imageCapture.takePicture(file,
 //                object : ImageCapture.OnImageSavedListener {
 //                    override fun onError(
@@ -104,7 +111,7 @@ class CameraFragment : Fragment() {
     }
 
     override fun onStop() {
-
+        CameraX.unbindAll()
         super.onStop()
     }
 

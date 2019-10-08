@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_login.*
 import org.koin.android.ext.android.inject
@@ -16,6 +18,7 @@ class LoginFragment : Fragment(), LoginContract.View {
 
     private val presenter: LoginContract.Presenter by inject()
     private val snackbar: Snackbar by lazy { Snackbar.make(fragment, "Please wait", Snackbar.LENGTH_INDEFINITE) }
+    private val navigationController: NavController by lazy { findNavController() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
         inflater.inflate(R.layout.fragment_login, container, false)
@@ -81,7 +84,7 @@ class LoginFragment : Fragment(), LoginContract.View {
     }
 
     override fun goToCamera() {
-        Toast.makeText(context, getString(R.string.registered_successfully), Toast.LENGTH_SHORT).show()
+        navigationController.navigate(R.id.action_loginFragment_to_cameraFragment)
     }
 
     override fun showError() {
