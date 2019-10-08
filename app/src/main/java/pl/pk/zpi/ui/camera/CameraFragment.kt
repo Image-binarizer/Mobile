@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_camera.*
 import pl.pk.zpi.R
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import java.io.File
 
 class CameraFragment : Fragment() {
 
@@ -71,24 +73,20 @@ class CameraFragment : Fragment() {
 
         val imageCapture = ImageCapture(imageCaptureConfig)
         shutterButton.setOnClickListener {
-            navigationController.navigate(R.id.action_cameraFragment_to_previewFragment)
-//            imageCapture.takePicture(file,
-//                object : ImageCapture.OnImageSavedListener {
-//                    override fun onError(
-//                        error: ImageCapture.UseCaseError,
-//                        message: String, exc: Throwable?
-//                    ) {
-//                        val msg = "Photo capture failed: $message"
-//                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-//
-//                    }
-//
-//                    override fun onImageSaved(file: File) {
-//                        val msg = "Photo capture successfully: ${file.absolutePath}"
-//                        Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
-//                    }
-//                })
+            imageCapture.takePicture(File(activity?.filesDir, "photo.jpg"),
+                object : ImageCapture.OnImageSavedListener {
+                    override fun onError(
+                        imageCaptureError: ImageCapture.ImageCaptureError,
+                        message: String,
+                        cause: Throwable?
+                    ) {
+                        Toast.makeText(context, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
+                    }
 
+                    override fun onImageSaved(file: File) {
+                        navigationController.navigate(R.id.action_cameraFragment_to_previewFragment)
+                    }
+                })
         }
 
         CameraX.bindToLifecycle(this, preview, imageCapture)
