@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="pl.pk.zpi.ui.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="pl.pk.zpi.ui.camera.CameraFragment"
+        android:label="CameraFragment"
+        tools:layout="@layout/fragment_camera" >
+        <action
+            android:id="@+id/action_cameraFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
+        <action
+            android:id="@+id/action_cameraFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="pl.pk.zpi.ui.preview.PreviewFragment"
+        android:label="PreviewFragment"
+        tools:layout="@layout/fragment_preview" />
+    <fragment
+        android:id="@+id/galleryFragment"
+        android:name="pl.pk.zpi.ui.gallery.GalleryFragment"
+        android:label="GalleryFragment"
+        tools:layout="@layout/fragment_gallery" />
+
+</navigation>
