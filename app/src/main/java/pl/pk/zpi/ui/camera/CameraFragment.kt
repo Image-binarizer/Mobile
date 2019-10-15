@@ -5,18 +5,15 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Rational
 import android.util.Size
-import android.view.LayoutInflater
-import android.view.Surface
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.fragment_camera.*
-import pl.pk.zpi.R
-import android.view.WindowManager
-import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.fragment_camera.*
+import pl.pk.zpi.R
+import pl.pk.zpi.ui.preview.PreviewFragment
 import java.io.File
 
 class CameraFragment : Fragment() {
@@ -73,7 +70,8 @@ class CameraFragment : Fragment() {
 
         val imageCapture = ImageCapture(imageCaptureConfig)
         shutterButton.setOnClickListener {
-            imageCapture.takePicture(File(activity?.filesDir, "photo.jpg"),
+            val fileName = "${System.currentTimeMillis()}.jpg"
+            imageCapture.takePicture(File(activity?.filesDir, fileName),
                 object : ImageCapture.OnImageSavedListener {
                     override fun onError(
                         imageCaptureError: ImageCapture.ImageCaptureError,
@@ -84,7 +82,10 @@ class CameraFragment : Fragment() {
                     }
 
                     override fun onImageSaved(file: File) {
-                        navigationController.navigate(R.id.action_cameraFragment_to_previewFragment)
+                        navigationController.navigate(
+                            R.id.action_cameraFragment_to_previewFragment,
+                            PreviewFragment.newBundle(fileName)
+                        )
                     }
                 })
         }

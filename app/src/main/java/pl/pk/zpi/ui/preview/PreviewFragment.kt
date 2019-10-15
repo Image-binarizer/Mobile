@@ -22,8 +22,10 @@ class PreviewFragment: Fragment() {
     override fun onStart() {
         super.onStart()
 
+        val fileName = arguments?.getString(FILE_NAME_EXTRA)
+
         Glide.with(requireContext())
-            .load(File("${activity?.filesDir}/photo.jpg"))
+            .load(File("${activity?.filesDir}/${fileName}"))
             .into(imageView)
 
         close.setOnClickListener {
@@ -34,5 +36,13 @@ class PreviewFragment: Fragment() {
     override fun onStop() {
 
         super.onStop()
+    }
+
+    companion object {
+        private const val FILE_NAME_EXTRA = "FILE_NAME_EXTRA"
+
+        fun newBundle(fileName: String) = Bundle().apply {
+            putString(FILE_NAME_EXTRA, fileName)
+        }
     }
 }
