@@ -9,11 +9,13 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_preview.*
+import org.koin.android.ext.android.inject
 import pl.pk.zpi.R
 import java.io.File
 
-class PreviewFragment: Fragment() {
+class PreviewFragment : Fragment(), PreviewContract.View {
 
+    private val presenter: PreviewContract.Presenter by inject()
     private val navigationController: NavController by lazy { findNavController() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
@@ -21,20 +23,24 @@ class PreviewFragment: Fragment() {
 
     override fun onStart() {
         super.onStart()
+        presenter.onViewPresent(this, arguments?.getString(FILE_NAME_EXTRA))
 
-        val fileName = arguments?.getString(FILE_NAME_EXTRA)
+        close.setOnClickListener { presenter.onCloseTap() }
+        sendButton.setOnClickListener { presenter.onSendTap() }
+    }
 
+    override fun displayPhoto(fileName: String?) {
         Glide.with(requireContext())
-            .load(File("${activity?.filesDir}/${fileName}"))
+            .load(File("${activity?.filesDir}/$fileName"))
             .into(imageView)
+    }
 
-        close.setOnClickListener {
-            navigationController.popBackStack()
-        }
+    override fun goBack() {
+        navigationController.popBackStack()
     }
 
     override fun onStop() {
-
+        presenter.unsubscribe()
         super.onStop()
     }
 
