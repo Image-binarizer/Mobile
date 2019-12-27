@@ -27,7 +27,7 @@ android {
 
 ext {
     appCompatVersion = "1.1.0"
-    constraintLayoutVersion = "2.0.0-beta2"
+    constraintLayoutVersion = "2.0.0-beta4"
     cardViewVersion = "1.0.0"
     ktxVersion = "1.1.0"
     navigationVersion = "2.1.0"

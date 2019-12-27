@@ -3,13 +3,15 @@ package pl.pk.zpi.ui.login
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
+import pl.pk.zpi.domain.AuthTokenProvider
 import pl.pk.zpi.koin.SchedulerProvider
-import pl.pk.zpi.models.RegisterRequest
+import pl.pk.zpi.models.AuthRequest
 import pl.pk.zpi.networking.Service
 
 class LoginPresenter(
     private val schedulers: SchedulerProvider,
-    private val service: Service
+    private val service: Service,
+    private val authTokenProvider: AuthTokenProvider
 ) : LoginContract.Presenter {
 
     private lateinit var view: LoginContract.View
@@ -29,19 +31,34 @@ class LoginPresenter(
     }
 
     private fun register(email: String, password: String) {
-        compositeDisposable += service.register(RegisterRequest(email, password))
+        compositeDisposable += service.register(AuthRequest(email, password))
             .subscribeOn(schedulers.io())
             .observeOn(schedulers.main())
             .doOnSubscribe { view.showProgress() }
             .doAfterTerminate { view.hideProgress() }
             .subscribeBy(
-                onComplete = { view.goToCamera() },
-                onError = { view.showError() }
+                onComplete = { login(email, password) },
+                onError = {
+                    view.showError()
+                }
             )
     }
 
     private fun login(email: String, password: String) {
-        view.goToCamera()
+        compositeDisposable += service.login(AuthRequest(email, password))
+            .subscribeOn(schedulers.io())
+            .observeOn(schedulers.main())
+            .doOnSubscribe { view.showProgress() }
+            .doAfterTerminate { view.hideProgress() }
+            .subscribeBy (
+                onSuccess = {
+                    authTokenProvider.save(it.body)
+                    view.goToCamera()
+                },
+                onError = {
+                    view.showError()
+                }
+            )
     }
 
     override fun onChangeModeTap() {
