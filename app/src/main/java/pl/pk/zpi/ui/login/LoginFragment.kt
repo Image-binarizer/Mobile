@@ -17,7 +17,9 @@ import pl.pk.zpi.R
 class LoginFragment : Fragment(), LoginContract.View {
 
     private val presenter: LoginContract.Presenter by inject()
-    private val snackbar: Snackbar by lazy { Snackbar.make(fragment, "Please wait", Snackbar.LENGTH_INDEFINITE) }
+    private val snackbar: Snackbar by lazy {
+        Snackbar.make(fragment, getString(R.string.please_wait), Snackbar.LENGTH_INDEFINITE)
+    }
     private val navigationController: NavController by lazy { findNavController() }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =

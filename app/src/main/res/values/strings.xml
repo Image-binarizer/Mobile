@@ -8,4 +8,6 @@
     <string name="already_have_account">Already have an account? Login!</string>
     <string name="registered_successfully">Registered successfully</string>
     <string name="something_went_wrong">Something went wrong, try again</string>
+    <string name="please_wait">Please wait</string>
+    <string name="sending">Sending...</string>
 </resources>

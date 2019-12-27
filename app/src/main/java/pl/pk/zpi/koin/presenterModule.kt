@@ -10,6 +10,6 @@ import pl.pk.zpi.ui.preview.PreviewPresenter
 
 val presenterModule = module {
     factory<LoginContract.Presenter> { LoginPresenter(get(), get(), get()) }
-    factory<PreviewContract.Presenter> { PreviewPresenter(get(), get()) }
+    factory<PreviewContract.Presenter> { PreviewPresenter(get(), get(), get()) }
     factory<GalleryContract.Presenter> { GalleryPresenter(get(), get()) }
 }
