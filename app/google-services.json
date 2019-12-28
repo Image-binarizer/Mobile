@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "611044679137",
+    "firebase_url": "https://pk-zpi-26b1e.firebaseio.com",
+    "project_id": "pk-zpi-26b1e",
+    "storage_bucket": "pk-zpi-26b1e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:611044679137:android:97746800925bc8b5f786a0",
+        "android_client_info": {
+          "package_name": "pl.pk.zpi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "611044679137-25qcptjmiaq0lv0uu28useso7oqua9qr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL4IY9Ew-bnUHEFyaGExBLQpBttj1rPFA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "611044679137-25qcptjmiaq0lv0uu28useso7oqua9qr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
