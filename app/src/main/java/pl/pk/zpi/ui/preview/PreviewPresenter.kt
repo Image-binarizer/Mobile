@@ -1,12 +1,12 @@
 package pl.pk.zpi.ui.preview
 
+import android.util.Base64
+import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import pl.pk.zpi.domain.AuthTokenProvider
 import pl.pk.zpi.koin.SchedulerProvider
+import pl.pk.zpi.models.PhotoUploadRequest
 import pl.pk.zpi.networking.Service
 import java.io.File
 
@@ -29,15 +29,22 @@ class PreviewPresenter(
 
     override fun onSendTap() {
         filePath?.let {
-            val file = File(it)
-            val request =
-                MultipartBody.Part.createFormData(FILE_FIELD, file.name, RequestBody.create(IMAGE_MIME, file))
-            service.uploadPhoto(request, tokenProvider.read())
+            Single
+                .fromCallable {
+                    PhotoUploadRequest(
+                        tokenProvider.read(),
+                        File(it).name,
+                        Base64.encodeToString(File(it).readBytes(), Base64.NO_WRAP)
+                    )
+                }
+                .flatMapCompletable {
+                    service.uploadPhoto(it)
+                }
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.main())
                 .doOnSubscribe { view.showProgress() }
                 .doAfterTerminate { view.hideProgress() }
-                .subscribeBy (
+                .subscribeBy(
                     onComplete = {
                         view.goBack()
                     },
@@ -46,8 +53,6 @@ class PreviewPresenter(
                     }
                 )
         }
-
-        view.goBack()
     }
 
     override fun onCloseTap() {
@@ -58,8 +63,4 @@ class PreviewPresenter(
         compositeDisposable.clear()
     }
 
-    companion object {
-        private const val FILE_FIELD = "file"
-        private val IMAGE_MIME = MediaType.parse("image/jpeg")
-    }
 }

@@ -2,7 +2,6 @@ package pl.pk.zpi.domain
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import pl.pk.zpi.networking.API_KEY
 
 class AuthTokenProvider(private val sharedPrefs: SharedPreferences) {
 
@@ -12,7 +11,7 @@ class AuthTokenProvider(private val sharedPrefs: SharedPreferences) {
         }
     }
 
-    fun read() = sharedPrefs.getString(API_KEY, null)
+    fun read() = sharedPrefs.getString(AUTH_TOKEN_KEY, null)
 
 
     companion object {

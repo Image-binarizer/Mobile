@@ -31,13 +31,15 @@ class GalleryFragment: Fragment(), GalleryContract.View {
     override fun displayImages() {
         // TODO Temporarily load local files
 
-        activity?.filesDir
-            ?.list()
-            ?.toList()
-            ?.map { "${activity?.filesDir}/$it" }
-            ?.let {
-                galleryAdapter.photos = it
-            }
+//        activity?.filesDir
+//            ?.list()
+//            ?.toList()
+//            ?.map { "${activity?.filesDir}/$it" }
+//            ?.let {
+//                galleryAdapter.photos = it
+//            }
+
+        galleryAdapter.photos = listOf("https://zpi-client-pictures-bucket.s3-eu-west-1.amazonaws.com/3060896558797799550/pictures/original/single/sharingan.jpg")
     }
 
     override fun onStop() {

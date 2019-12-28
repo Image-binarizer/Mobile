@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import pl.pk.zpi.R
 import kotlinx.android.synthetic.main.item_gallery.view.*
-import java.io.File
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
@@ -32,7 +31,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
         fun loadImage(filePath: String) {
             Glide.with(item.context)
-                .load(File(filePath))
+                .load(filePath)
                 .into(item.imageView)
         }
 

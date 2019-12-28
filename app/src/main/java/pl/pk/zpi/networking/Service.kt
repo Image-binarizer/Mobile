@@ -5,6 +5,7 @@ import io.reactivex.Single
 import okhttp3.MultipartBody
 import pl.pk.zpi.models.AuthRequest
 import pl.pk.zpi.models.LoginResponse
+import pl.pk.zpi.models.PhotoUploadRequest
 import retrofit2.http.*
 
 interface Service {
@@ -23,15 +24,12 @@ interface Service {
 
     @GET(PHOTOS)
     fun getPhotos(
-        @Header(HEADER_AUTH_TOKEN) authToken: String?,
         @Header(HEADER_API_KEY) apiKey: String = API_KEY
     ): Single<List<String>>
 
-    @Multipart
     @POST(PHOTOS)
     fun uploadPhoto(
-        @Part file: MultipartBody.Part,
-        @Header(HEADER_AUTH_TOKEN) authToken: String?,
+        @Body request: PhotoUploadRequest,
         @Header(HEADER_API_KEY) apiKey: String = API_KEY
     ): Completable
 

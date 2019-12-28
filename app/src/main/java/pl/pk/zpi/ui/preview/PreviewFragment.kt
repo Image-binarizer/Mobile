@@ -46,11 +46,13 @@ class PreviewFragment : Fragment(), PreviewContract.View {
     }
 
     override fun showProgress() {
-        snackbar.show()
+        Toast.makeText(context, "Start sending", Toast.LENGTH_SHORT).show()
+//        snackbar.show()
     }
 
     override fun hideProgress() {
-        snackbar.dismiss()
+        Toast.makeText(context, "Finish sending", Toast.LENGTH_SHORT).show()
+//        snackbar.dismiss()
     }
 
     override fun goBack() {

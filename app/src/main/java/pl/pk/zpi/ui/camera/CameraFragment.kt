@@ -65,7 +65,7 @@ class CameraFragment : Fragment() {
                 setLensFacing(CameraX.LensFacing.BACK)
                 setTargetAspectRatio(screenAspectRatio)
                 setTargetRotation(texture.display.rotation)
-                setCaptureMode(ImageCapture.CaptureMode.MAX_QUALITY)
+                setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
             }.build()
 
         val imageCapture = ImageCapture(imageCaptureConfig)
