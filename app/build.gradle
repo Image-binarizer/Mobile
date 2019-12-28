@@ -27,6 +27,7 @@ android {
         versionCode 1
         versionName "1.$System.env.TRAVIS_JOB_NUMBER"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "API_KEY", "\"$System.env.AWS_KEY\""
     }
     buildTypes {
         release {
