@@ -1,5 +1,7 @@
 package pl.pk.zpi.ui.camera
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Matrix
 import android.os.Bundle
 import android.util.DisplayMetrics
@@ -8,6 +10,7 @@ import android.util.Size
 import android.view.*
 import android.widget.Toast
 import androidx.camera.core.*
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -35,12 +38,35 @@ class CameraFragment : Fragment() {
             WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
         )
 
-        texture.post { startCamera() }
-
         galleryButton.setOnClickListener {
             navigationController.navigate(R.id.action_cameraFragment_to_galleryFragment)
         }
+
+        if(permissionCheck()) {
+            startPreview()
+        } else {
+            requestPermissions(CAMERA_PERMISSION, CAMERA_REQUEST_CODE)
+        }
     }
+
+    private fun startPreview() {
+        texture.post { startCamera() }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == CAMERA_REQUEST_CODE) {
+            if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                startPreview()
+            } else {
+                Toast.makeText(context, getString(R.string.missing_permission), Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun permissionCheck() =
+        ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+
 
     private fun startCamera() {
         val metrics = DisplayMetrics().also { texture.display.getRealMetrics(it) }
@@ -112,6 +138,11 @@ class CameraFragment : Fragment() {
     override fun onStop() {
         CameraX.unbindAll()
         super.onStop()
+    }
+
+    companion object {
+        private val CAMERA_PERMISSION = arrayOf(Manifest.permission.CAMERA)
+        private const val CAMERA_REQUEST_CODE = 1234
     }
 
 }
