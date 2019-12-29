@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.firebase.appdistribution'
 
+def buildNumber = Double.valueOf(System.env.TRAVIS_JOB_NUMBER ?: 0)
+
 android {
     signingConfigs {
         release {
@@ -10,12 +12,6 @@ android {
             storePassword "$System.env.KEYSTORE_PASS"
             keyPassword "$System.env.KEY_PASS"
             keyAlias = "$System.env.KEY_ALIAS"
-        }
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-            keyPassword 'android'
-            keyAlias = 'androiddebugkey'
         }
     }
     compileSdkVersion 29
@@ -25,7 +21,7 @@ android {
         minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
-        versionName "1.$System.env.TRAVIS_JOB_NUMBER"
+        versionName "1.$buildNumber"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField "String", "API_KEY", "\"$System.env.AWS_KEY\""
     }
@@ -34,6 +30,7 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            debuggable = false
             firebaseAppDistribution {
                 releaseNotes = "New version"
                 groups = "Team"
@@ -41,7 +38,7 @@ android {
         }
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.debug
+            debuggable = true
         }
     }
     compileOptions {
