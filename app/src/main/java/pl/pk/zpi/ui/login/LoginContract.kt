@@ -6,9 +6,10 @@ interface LoginContract {
         fun switchToRegister()
         fun initViews()
         fun goToCamera()
-        fun showError()
+        fun showLoginError()
         fun showProgress()
         fun hideProgress()
+        fun showRegisterError()
     }
 
     interface Presenter {

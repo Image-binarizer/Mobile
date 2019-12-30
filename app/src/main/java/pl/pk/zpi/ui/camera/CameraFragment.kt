@@ -39,6 +39,7 @@ class CameraFragment : Fragment(), CameraContract.View {
 
         galleryButton.setOnClickListener { presenter.onGalleryTap() }
         shutterButton.setOnClickListener { presenter.onShutterTap() }
+        missingPermission.setOnClickListener { checkPermissions() }
     }
 
     private fun checkPermissions() {
@@ -64,14 +65,19 @@ class CameraFragment : Fragment(), CameraContract.View {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 startPreview()
+                hideMissingPermission()
             } else {
                 showMissingPermission()
             }
         }
     }
 
-    override fun showMissingPermission() {
-        Toast.makeText(context, getString(R.string.missing_permission), Toast.LENGTH_LONG).show()
+    private fun showMissingPermission() {
+        missingPermission.visibility = View.VISIBLE
+    }
+
+    private fun hideMissingPermission() {
+        missingPermission.visibility = View.GONE
     }
 
     private fun isPermissionGranted() =
@@ -79,7 +85,6 @@ class CameraFragment : Fragment(), CameraContract.View {
             requireContext(),
             Manifest.permission.CAMERA
         ) == PackageManager.PERMISSION_GRANTED
-
 
     private fun startPreview() {
         texture.post {

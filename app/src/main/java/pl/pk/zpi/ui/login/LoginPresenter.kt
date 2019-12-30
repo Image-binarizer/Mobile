@@ -39,7 +39,7 @@ class LoginPresenter(
             .subscribeBy(
                 onComplete = { login(email, password) },
                 onError = {
-                    view.showError()
+                    view.showRegisterError()
                 }
             )
     }
@@ -56,7 +56,7 @@ class LoginPresenter(
                     view.goToCamera()
                 },
                 onError = {
-                    view.showError()
+                    view.showLoginError()
                 }
             )
     }

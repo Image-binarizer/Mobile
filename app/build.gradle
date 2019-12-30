@@ -32,7 +32,7 @@ android {
             signingConfig signingConfigs.release
             debuggable = false
             firebaseAppDistribution {
-                releaseNotes = "New version"
+                releaseNotes = "$System.env.TRAVIS_COMMIT_MESSAGE"
                 groups = "Team"
             }
         }

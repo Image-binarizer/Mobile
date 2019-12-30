@@ -1,5 +1,6 @@
 package pl.pk.zpi.ui.login
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -89,8 +90,18 @@ class LoginFragment : Fragment(), LoginContract.View {
         navigationController.navigate(R.id.action_loginFragment_to_cameraFragment)
     }
 
-    override fun showError() {
-        Toast.makeText(context, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
+    override fun showRegisterError() {
+        Snackbar.make(fragment, getString(R.string.register_error), Snackbar.LENGTH_LONG).apply {
+            view.setBackgroundColor(Color.RED)
+            show()
+        }
+    }
+
+    override fun showLoginError() {
+        Snackbar.make(fragment, getString(R.string.login_error), Snackbar.LENGTH_LONG).apply {
+            view.setBackgroundColor(Color.RED)
+            show()
+        }
     }
 
     override fun onStop() {
