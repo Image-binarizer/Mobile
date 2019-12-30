@@ -16,24 +16,29 @@ import pl.pk.zpi.R
 import pl.pk.zpi.ui.preview.PreviewFragment
 import java.io.File
 
-class CameraFragment : Fragment() {
+class CameraFragment : Fragment(), CameraContract.View {
 
     private val navigationController: NavController by lazy { findNavController() }
+    private val presenter: CameraContract.Presenter by inject()
     private val previewConfig: PreviewConfig by inject()
     private val imageCaptureConfig: ImageCaptureConfig by inject()
+    private lateinit var preview: Preview
+    private lateinit var imageCapture: ImageCapture
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_camera, container, false)
 
     override fun onStart() {
         super.onStart()
+        presenter.onViewPresent(this)
+    }
 
+    override fun initView() {
         setWindowFlags()
         checkPermissions()
 
-        galleryButton.setOnClickListener {
-            navigationController.navigate(R.id.action_cameraFragment_to_galleryFragment)
-        }
+        galleryButton.setOnClickListener { presenter.onGalleryTap() }
+        shutterButton.setOnClickListener { presenter.onShutterTap() }
     }
 
     private fun checkPermissions() {
@@ -55,18 +60,18 @@ class CameraFragment : Fragment() {
         )
     }
 
-    private fun startPreview() {
-        texture.post { startCamera() }
-    }
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if (requestCode == CAMERA_REQUEST_CODE) {
             if (grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
                 startPreview()
             } else {
-                Toast.makeText(context, getString(R.string.missing_permission), Toast.LENGTH_LONG).show()
+                showMissingPermission()
             }
         }
+    }
+
+    override fun showMissingPermission() {
+        Toast.makeText(context, getString(R.string.missing_permission), Toast.LENGTH_LONG).show()
     }
 
     private fun isPermissionGranted() =
@@ -76,32 +81,42 @@ class CameraFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED
 
 
-    private fun startCamera() {
-        val preview = Preview(previewConfig)
-        preview.setOnPreviewOutputUpdateListener {
-            texture.surfaceTexture = it.surfaceTexture
-        }
+    private fun startPreview() {
+        texture.post {
+            this.preview = Preview(previewConfig)
+            this.imageCapture = ImageCapture(imageCaptureConfig)
 
-        val imageCapture = ImageCapture(imageCaptureConfig)
-        shutterButton.setOnClickListener {
-            val fileName = "${System.currentTimeMillis()}.jpg"
-            imageCapture.takePicture(File(activity?.filesDir, fileName), onImageSaved(fileName))
-        }
+            preview.setOnPreviewOutputUpdateListener {
+                texture.surfaceTexture = it.surfaceTexture
+            }
 
-        CameraX.bindToLifecycle(this, preview, imageCapture)
+            CameraX.bindToLifecycle(this, preview, imageCapture)
+        }
     }
 
-    private fun onImageSaved(fileName: String) = object : ImageCapture.OnImageSavedListener {
+    override fun captureImage(fileName: String) {
+        imageCapture.takePicture(File(activity?.filesDir, fileName), onImageSaved())
+    }
+
+    private fun onImageSaved() = object : ImageCapture.OnImageSavedListener {
         override fun onError(imageCaptureError: ImageCapture.ImageCaptureError, message: String, cause: Throwable?) {
             Toast.makeText(context, getString(R.string.something_went_wrong), Toast.LENGTH_LONG).show()
         }
 
         override fun onImageSaved(file: File) {
-            navigationController.navigate(
-                R.id.action_cameraFragment_to_previewFragment,
-                PreviewFragment.newBundle(fileName)
-            )
+            navigateToPreview(file.name)
         }
+    }
+
+    override fun navigateToGallery() {
+        navigationController.navigate(R.id.action_cameraFragment_to_galleryFragment)
+    }
+
+    override fun navigateToPreview(fileName: String) {
+        navigationController.navigate(
+            R.id.action_cameraFragment_to_previewFragment,
+            PreviewFragment.newBundle(fileName)
+        )
     }
 
     override fun onStop() {
