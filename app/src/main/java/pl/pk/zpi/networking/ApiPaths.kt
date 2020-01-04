@@ -7,4 +7,5 @@ const val HEADER_API_KEY = "x-api-key"
 const val REGISTER = "/zpi/signup"
 const val LOGIN = "/zpi/signin"
 
-const val PHOTOS = "/zpi/uploadimage"
+const val PHOTO_UPLOAD = "/zpi/uploadimage"
+const val GALLERY = "/zpi/imagelist"

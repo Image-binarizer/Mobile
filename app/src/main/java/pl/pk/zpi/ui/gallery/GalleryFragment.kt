@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_gallery.*
@@ -28,18 +29,12 @@ class GalleryFragment: Fragment(), GalleryContract.View {
         }
     }
 
-    override fun displayImages() {
-        // TODO Temporarily load local files
+    override fun displayImages(links: List<String>) {
+        galleryAdapter.photos = links
+    }
 
-//        activity?.filesDir
-//            ?.list()
-//            ?.toList()
-//            ?.map { "${activity?.filesDir}/$it" }
-//            ?.let {
-//                galleryAdapter.photos = it
-//            }
-
-        galleryAdapter.photos = listOf("https://zpi-client-pictures-bucket.s3-eu-west-1.amazonaws.com/3060896558797799550/pictures/original/single/sharingan.jpg")
+    override fun showError() {
+        Toast.makeText(context, getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show()
     }
 
     override fun onStop() {

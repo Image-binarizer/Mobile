@@ -42,8 +42,13 @@ class PreviewPresenter(
                 }
                 .subscribeOn(schedulers.io())
                 .observeOn(schedulers.main())
-                .doOnSubscribe { view.showProgress() }
-                .doAfterTerminate { view.hideProgress() }
+                .doOnSubscribe {
+                    view.showProgress()
+                }
+                .doAfterTerminate {
+                    view.hideProgress()
+                    File(it).delete()
+                }
                 .subscribeBy(
                     onComplete = {
                         view.goBack()

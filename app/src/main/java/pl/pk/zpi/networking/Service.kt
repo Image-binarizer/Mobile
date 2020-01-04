@@ -3,9 +3,7 @@ package pl.pk.zpi.networking
 import io.reactivex.Completable
 import io.reactivex.Single
 import pl.pk.zpi.BuildConfig
-import pl.pk.zpi.models.AuthRequest
-import pl.pk.zpi.models.LoginResponse
-import pl.pk.zpi.models.PhotoUploadRequest
+import pl.pk.zpi.models.*
 import retrofit2.http.*
 
 interface Service {
@@ -22,12 +20,14 @@ interface Service {
         @Header(HEADER_API_KEY) apiKey: String = BuildConfig.API_KEY
     ): Single<LoginResponse>
 
-    @GET(PHOTOS)
-    fun getPhotos(
-        @Header(HEADER_API_KEY) apiKey: String = BuildConfig.API_KEY
-    ): Single<List<String>>
 
-    @POST(PHOTOS)
+    @POST(GALLERY)
+    fun getImages(
+        @Body request: GalleryRequest,
+        @Header(HEADER_API_KEY) apiKey: String = BuildConfig.API_KEY
+    ) : Single<GalleryResponse>
+
+    @POST(PHOTO_UPLOAD)
     fun uploadPhoto(
         @Body request: PhotoUploadRequest,
         @Header(HEADER_API_KEY) apiKey: String = BuildConfig.API_KEY
