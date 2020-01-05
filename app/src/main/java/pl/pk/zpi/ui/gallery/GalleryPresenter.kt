@@ -22,20 +22,32 @@ class GalleryPresenter(
         fetchImages()
     }
 
-    private fun fetchImages() {
+    override fun fetchImages() {
+        view.displayImages(emptyList())
+
         val request = GalleryRequest(tokenProvider.read())
         compositeDisposable += service.getImages(request)
             .subscribeOn(schedulerProvider.io())
             .observeOn(schedulerProvider.main())
+            .doOnSubscribe {
+                view.hideEmpty()
+                view.showProgress()
+            }
+            .doAfterTerminate {
+                view.hideProgress()
+            }
             .subscribeBy(
                 onSuccess = {
-                    view.displayImages(it.body ?: emptyList())
+                    if (it.body.isEmpty()) {
+                        view.showEmpty()
+                    } else {
+                        view.displayImages(it.body)
+                    }
                 },
                 onError = {
                     view.showError()
                 }
             )
-
     }
 
     override fun unsubscribe() {

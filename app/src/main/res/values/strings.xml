@@ -13,4 +13,5 @@
     <string name="missing_permission">You have to allow camera permission to use camera\nTap here to run permission check again</string>
     <string name="register_error">User with this email already exists</string>
     <string name="login_error">Wrong email or password</string>
+    <string name="there_are_no_images_in_gallery">There are no images in gallery</string>
 </resources>

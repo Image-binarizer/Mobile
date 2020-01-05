@@ -19,7 +19,7 @@
         android:id="@+id/missingPermission"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@android:color/white"
+        android:textColor="@color/background"
         android:gravity="center"
         android:text="@string/missing_permission"
         android:visibility="gone"
