@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import pl.pk.zpi.R
 import kotlinx.android.synthetic.main.item_gallery.view.*
 
-class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter(private val onItemClick: (String) -> Unit) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
     var photos: List<String> = emptyList()
     set(value) {
@@ -30,6 +30,12 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
     inner class ViewHolder(private val item: View) : RecyclerView.ViewHolder(item) {
 
         fun loadImage(filePath: String) {
+            if (filePath.contains("original")) {
+                item.imageView.setOnClickListener {
+                    onItemClick(filePath.substring(filePath.lastIndexOf("/")+1, filePath.indexOf(".jpg")))
+                }
+            }
+
             Glide.with(item.context)
                 .load(filePath)
                 .into(item.imageView)

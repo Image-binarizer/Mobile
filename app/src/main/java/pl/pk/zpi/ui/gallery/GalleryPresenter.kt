@@ -12,13 +12,15 @@ class GalleryPresenter(
     private val schedulerProvider: SchedulerProvider,
     private val service: Service,
     private val tokenProvider: AuthTokenProvider
-): GalleryContract.Presenter {
+) : GalleryContract.Presenter {
 
     private lateinit var view: GalleryContract.View
     private val compositeDisposable = CompositeDisposable()
+    private lateinit var imageGroup: String
 
-    override fun onViewPresent(view: GalleryContract.View) {
+    override fun onViewPresent(view: GalleryContract.View, imageGroup: String?) {
         this.view = view
+        this.imageGroup = imageGroup ?: "original"
         fetchImages()
     }
 
@@ -41,7 +43,9 @@ class GalleryPresenter(
                     if (it.body.isEmpty()) {
                         view.showEmpty()
                     } else {
-                        view.displayImages(it.body)
+                        it.body
+                            .filter { url -> url.contains(imageGroup)}
+                            .let { list -> view.displayImages(list) }
                     }
                 },
                 onError = {

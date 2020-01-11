@@ -10,7 +10,7 @@ interface GalleryContract {
         fun showError()
     }
     interface Presenter {
-        fun onViewPresent(view: View)
+        fun onViewPresent(view: View, imageGroup: String?)
         fun unsubscribe()
         fun fetchImages()
     }
