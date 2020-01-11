@@ -3,6 +3,7 @@ package pl.pk.zpi.ui.preview
 import android.util.Base64
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import pl.pk.zpi.domain.AuthTokenProvider
 import pl.pk.zpi.koin.SchedulerProvider
@@ -29,7 +30,7 @@ class PreviewPresenter(
 
     override fun onSendTap() {
         filePath?.let {
-            Single
+            compositeDisposable += Single
                 .fromCallable {
                     PhotoUploadRequest(
                         tokenProvider.read(),

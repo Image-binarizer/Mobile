@@ -9,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_preview.*
 import org.koin.android.ext.android.inject
 import pl.pk.zpi.R
@@ -20,9 +18,6 @@ class PreviewFragment : Fragment(), PreviewContract.View {
 
     private val presenter: PreviewContract.Presenter by inject()
     private val navigationController: NavController by lazy { findNavController() }
-    private val snackbar: Snackbar by lazy {
-        Snackbar.make(fragment, getString(R.string.sending), Snackbar.LENGTH_INDEFINITE)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
         inflater.inflate(R.layout.fragment_preview, container, false)
@@ -46,13 +41,11 @@ class PreviewFragment : Fragment(), PreviewContract.View {
     }
 
     override fun showProgress() {
-        Toast.makeText(context, "Start sending", Toast.LENGTH_SHORT).show()
-//        snackbar.show()
+        progress.visibility = View.VISIBLE
     }
 
     override fun hideProgress() {
-        Toast.makeText(context, "Finish sending", Toast.LENGTH_SHORT).show()
-//        snackbar.dismiss()
+        progress.visibility = View.GONE
     }
 
     override fun goBack() {

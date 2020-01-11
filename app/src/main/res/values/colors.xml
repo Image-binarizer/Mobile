@@ -6,4 +6,5 @@
     <color name="background">#CCCCCC</color>
     <color name="foreground">#EEEEEE</color>
     <color name="darkBackground">#272727</color>
+    <color name="darkBackgroundSemitransparent">#AA272727</color>
 </resources>
