@@ -24,6 +24,7 @@ val cameraModule = module {
             setLensFacing(CameraX.LensFacing.BACK)
             setTargetAspectRatio(get())
             setCaptureMode(ImageCapture.CaptureMode.MIN_LATENCY)
+            setTargetResolution(Size(480, 800))
         }.build()
     }
 }
